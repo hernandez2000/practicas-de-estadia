@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      home: Scaffold(
+    appBar: AppBar(
+        title: Text("ListView"),
+    ),
+    body: ListView.builder(
+        itemBuilder:(BuildContext context, int Index){
+          return Card(
+            child: Image.network('https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/5fc8bee05cafe83492ff9283/parrafo.jpg'),
+
+          );
+      },
+      ),
+    ),
+    );
+  }
+}
