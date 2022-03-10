@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:uso_navegador/pages/my_home_pages.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: "MaterialApp",
+       // home: MyHomePage(),
+      initialRoute: "/",
+      routes: {
+          "/":(BuildContext context){return MyHomePage();}
+      },
+    );
+  }
+}
+  
+   segunda pagina(my_home_page.dart)
+ 
+ import 'package:flutter/material.dart';
+
+import 'second_page.dart';
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Uso basico del navegador"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text("Mostrar Segunda Pantalla"),
+          onPressed: (){
+        _showSecondPage(context);
+      },
+      ),
+      ),
+    );
+  }
+
+  void _showSecondPage(BuildContext context) {
+    final route = MaterialPageRoute(builder: (BuildContext context){
+      return SecondPage(
+        name: "Reynaldo"
+      );
+    });
+    Navigator.of(context).push(route);
+
+  }
+
+}
+
+
+
+    tercera pagina(second_page.dart)
+  
+  import 'package:flutter/material.dart';
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({dynamic Key, this.name}) : super();
+
+  final name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("segunda pantalla"),
+      ),
+      body: Center(
+        child: Text(name),
+      ),
+    );
+  }
+}
