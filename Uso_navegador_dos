@@ -1,0 +1,124 @@
+      primer pagina main.dart
+      
+import 'package:flutter/material.dart';
+import 'package:uso_navigator_dos/pages/my_home_page.dart';
+import 'package:uso_navigator_dos/pages/second_page.dart';
+
+  void main() => runApp(MyApp());
+
+  class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+  return MaterialApp(
+  title: "Implementacion de campos de formulario sin Widget Form",
+  // home: MyHomePage(),
+  initialRoute: "/",
+  routes: {
+  "/":(BuildContext context) => MyHomePage(),
+    "/second":(BuildContext context) => SecondPage(),
+  },
+  );
+  }
+  }
+  
+     segunda pagina my_home_page.dart
+     
+  import 'package:flutter/material.dart';
+import 'second_page.dart';
+
+class MyHomePage extends StatefulWidget {
+
+  _MyHomePageState createState() => _MyHomePageState();
+
+}
+class _MyHomePageState extends State<MyHomePage> {
+  late TextEditingController nameTextController;
+  late TextEditingController lastNameTextController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title:
+        Text("Implementacion de campos de formulario sin Widget Form"),
+      ),
+      body: Padding (
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(labelText: "Nombre:"),
+            controller: nameTextController,
+          ),
+          TextField(
+            decoration: InputDecoration(labelText: "Apellido:"),
+            controller: lastNameTextController,
+          ),
+          RaisedButton(
+          child: Text("Mostrar segunda pantalla"),
+          onPressed: () {
+            _showSecondPage(context);
+          },
+          ),
+    ],
+    )
+      ),
+    );
+  }
+  void _showSecondPage(BuildContext context){
+    Navigator.of(context).pushNamed("/second",
+    arguments: SecondPageArguments(
+      nameTextController.text,
+      lastNameTextController.text));
+    }
+
+    @override
+    void initState(){
+  //TODO: implement initState
+super.initState();
+nameTextController = TextEditingController();
+lastNameTextController = TextEditingController();
+}
+@override
+void dispose() {
+      //TODO: implement dispose
+  super.dispose();
+
+  nameTextController.dispose();
+  lastNameTextController.dispose();
+    }
+  }
+
+      ultima pagina second_page.dart
+      
+  import 'package:flutter/material.dart';
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    SecondPageArguments arguments = ModalRoute.of(context)?.settings.arguments as SecondPageArguments;
+
+    return Scaffold(
+        appBar: AppBar(
+       title: Text("Segunda Pantalla",)
+        ),
+      body: Center(
+            child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(arguments.name),
+          Text(arguments.lastName),
+        ]
+        )
+    ),
+    );
+  }
+}
+  class SecondPageArguments {
+     String name;
+     String lastName;
+  SecondPageArguments(this.name, this.lastName);
+
+}    
