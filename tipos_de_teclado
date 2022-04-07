@@ -1,0 +1,231 @@
+        primer clase main.dart
+        
+import 'package:flutter/material.dart';
+import 'package:tipos_de_teclado/pages/my_home_page.dart';
+import 'package:tipos_de_teclado/pages/second_page.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Implementacion de campos de formulario sin Widget Form",
+      // home: MyHomePage(),
+      initialRoute: "/",
+      routes: {
+        "/":(BuildContext context) => MyHomePage(),
+        "/second":(BuildContext context) => SecondPage(),
+      },
+    );
+  }
+}
+
+         segunda clase my_home_page.dart
+         
+ import 'package:flutter/material.dart';
+import 'second_page.dart';
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+class _MyHomePageState extends State<MyHomePage> {
+  late String nameValue;
+  late String lastnameValue;
+  late String phone;
+  late String emailAddress;
+  late String number;
+
+  final nameController = TextEditingController(text: "Reynaldo");
+  final lastnameController = TextEditingController();
+
+  late FocusNode nameFocus;
+  late FocusNode lastnameFocus;
+  late FocusNode telephoneFocus;
+  late FocusNode emailFocus;
+  late FocusNode ageFocus;
+
+  final formkey = GlobalKey<FormState>();
+
+  get phoneController => null;
+  get emailController => null;
+  get numberController => null;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title:
+        Text("Implementacion de formulario con el Widget Form"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Form(
+            key: formkey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Nombre:"),
+                  onSaved: (value) {
+
+                    nameValue = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                  },
+                  focusNode: this.nameFocus,
+                  onEditingComplete: () => requestFucos(context, lastnameFocus),
+                  textInputAction: TextInputAction.next,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Apellido:"),
+                  onSaved: (value) {
+                    lastnameValue = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                  },
+                  focusNode: this.lastnameFocus,
+                  onEditingComplete: () => requestFucos(context, telephoneFocus),
+                  textInputAction: TextInputAction.next,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Numero de Telefono:"),
+                  onSaved: (value) {
+                    phone = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                  },
+                  keyboardType: TextInputType.phone,
+                    focusNode: this.telephoneFocus,
+                  onEditingComplete: () => requestFucos(context, emailFocus),
+                  textInputAction: TextInputAction.next,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Correo Electronico:"),
+                  onSaved: (value) {
+                    emailAddress = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                    focusNode: this.emailFocus,
+                  onEditingComplete: () => requestFucos(context, ageFocus),
+                  textInputAction: TextInputAction.next,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Edad:"),
+                  onSaved: (value) {
+                    number = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Llene este campo";
+                    }
+                  },
+                  keyboardType: TextInputType.number,
+                    focusNode: this.ageFocus,
+                ),
+                RaisedButton(
+                  child: Text("Mostrar segunda pantalla"),
+                  onPressed: () {
+                    _showSecondPage(context);
+                  },
+                ),
+              ],
+            )
+        ),
+      ),
+    );
+  }
+   void requestFucos(BuildContext context, FocusNode focusNode){
+    FocusScope.of(context).requestFocus(focusNode);
+   }
+
+  void _showSecondPage(BuildContext context) {
+    if (formkey.currentState!.validate()) {
+      formkey.currentState?.save();
+      Navigator.of(context).pushNamed("/second",
+          arguments: SecondPageArguments(
+              this.nameValue, this.lastnameValue, this.phone,
+          this.emailAddress, this.number));
+    }
+  }
+  @override
+  void dispose() {
+    //TODO: implement dipose
+    super.dispose();
+    this.nameController.dispose();
+    this.lastnameController.dispose();
+    this.phoneController.dispose();
+    this.emailController.despose();
+    this.numberController.dispose();
+  }
+  @override
+  void initState() {
+    //TODO: implement initState
+    super.initState();
+
+    nameFocus = FocusNode();
+    lastnameFocus = FocusNode();
+    telephoneFocus = FocusNode();
+    emailFocus = FocusNode();
+    ageFocus = FocusNode();
+  }
+} 
+            tercera clase second_page.dart
+          
+import 'dart:core';
+import 'package:flutter/material.dart';
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    SecondPageArguments arguments = ModalRoute.of(context)?.settings.arguments as SecondPageArguments;
+
+    return Scaffold(
+      appBar: AppBar(
+          title: Text("Segunda Pantalla")
+      ),
+      body: Center(
+          child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(arguments.nameValue),
+                Text(arguments.lastnameValue),
+                Text(arguments. phone),
+                Text(arguments.number),
+                Text(arguments.emailAddress),
+              ]
+          )
+      ),
+    );
+  }
+}
+
+class SecondPageArguments {  String nameValue;
+String lastnameValue;
+String phone;
+String number;
+String emailAddress;
+
+SecondPageArguments(this.nameValue, this.lastnameValue,
+    this.phone, this.number, this.emailAddress);
+  }
+
+       
+   
